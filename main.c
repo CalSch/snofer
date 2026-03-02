@@ -116,6 +116,8 @@ void do_request(char* path) {
 
     if (strlen(path)==0)
         strcat(fname,"/index");
+    if (strlen(path)==1) && path[0]=='/')
+        strcat(fname,"index");
 
     /* printf("fname='%s'\n",fname); */
 
