@@ -131,7 +131,21 @@ void do_request(char* path) {
         f = fopen("notfound","r");
 
         if (f == NULL) {
-            dprintf(con_fd,"3server is broken, oops\t\terror.host\t1\r\n.\r\n");
+            dprintf(con_fd,"3server is broken, oops\t\terror.host\t1\r\n");
+            send_text("btw, you're request was:");
+            char* hex = malloc(strlen(path)*3+1);
+            // thanks claude!
+            {
+                char* p = path;
+                char* h = hex;
+                while (*p) {
+                    h += sprintf(h, "%02x ", (unsigned char)*p++);
+                }
+                *h = '\0';
+            }
+            send_text(hex);
+
+            dprintf(con_fd,".\r\n");
             return;
         }
     }
