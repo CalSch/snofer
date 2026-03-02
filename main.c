@@ -14,7 +14,8 @@
 #define MAX_PATH_SIZE 256
 #define MAX_LINE_SIZE 256
 
-#define HOSTNAME "localhost"
+/* #define HOSTNAME "localhost" */
+const char* HOSTNAME = "localhost";
 
 int sock_fd;
 int con_fd;
@@ -119,7 +120,8 @@ void do_request(char* path) {
     /* printf("fname='%s'\n",fname); */
 
     if (strstr("..",fname) != NULL) {
-        fname = "notfound";
+        /* fname = "notfound"; */
+        strcpy(fname,"notfound");
     }
 
     FILE* f = fopen(fname,"r");
@@ -172,6 +174,8 @@ int main(int argc, char** argv) {
     for (int i=1;i<argc;i++) {
         if (!strcmp(argv[i],"-port"))
             port = atoi(argv[++i]);
+        else if (!strcmp(argv[i],"-host"))
+            HOSTNAME = argv[++i];
         else
             printf("idk what this arg means: '%s'\n",argv[i]);
     }
