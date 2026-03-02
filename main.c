@@ -3,6 +3,7 @@
 #include <sys/socket.h> // socket, bind, listen, accept, AF_INET, SOCK_STREAM
 #include <sys/types.h>  // htonl, htons, socklen_t
 #include <unistd.h>     // read, write, close
+#include <arpa/inet.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -15,7 +16,8 @@
 #define MAX_LINE_SIZE 256
 
 /* #define HOSTNAME "localhost" */
-const char* HOSTNAME = "localhost";
+char* HOSTNAME = "localhost";
+int port = 70;
 
 int sock_fd;
 int con_fd;
@@ -187,7 +189,6 @@ int main(int argc, char** argv) {
     // The htonl() function converts the unsigned integer hostlong from host byte order to network byte order.
     server_sockaddr_in.sin_addr.s_addr = htonl(INADDR_ANY);
 
-    int port = 7070;
     for (int i=1;i<argc;i++) {
         if (!strcmp(argv[i],"-port"))
             port = atoi(argv[++i]);
@@ -226,13 +227,14 @@ int main(int argc, char** argv) {
         // accept() extracts the first connection request on the queue of pending connections for the listening socket
         // The address info from the client will be stored in client_sockaddr_in
         
-        printf("waiting for accept()\n");
+        printf("  waiting for accept()\n");
         con_fd = accept(sock_fd, (struct sockaddr *)&client_sockaddr_in, &len);
         /* printf("got fd %d\n",con_fd); */
         if (con_fd == -1) {
             perror("accept()");
             exit(1);
         }
+        printf("accept from %s\n",inet_ntoa(client_sockaddr_in.sin_addr));
 
         char path_buf[MAX_PATH_SIZE] = {};
 
@@ -240,7 +242,7 @@ int main(int argc, char** argv) {
         // read() attempts to read up to MAX_PATH_SIZE bytes from file descriptor con_fd into path_buf
         read(con_fd, path_buf, sizeof(path_buf));
         remove_newline(path_buf);
-        printf("request: '%s'\n", path_buf);
+        printf("  request: '%s'\n", path_buf);
 
         do_request(path_buf);
 
