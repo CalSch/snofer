@@ -119,7 +119,7 @@ void do_request(char* path) {
 
     /* printf("fname='%s'\n",fname); */
 
-    if (strstr("..",fname) != NULL) {
+    if (strstr(fname,"..") != NULL) {
         /* fname = "notfound"; */
         printf("sneaky guy...\n");
         strcpy(fname,"notfound");
