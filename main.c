@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <regex.h>
+#include <stdbool.h>
 
 #define LOGd(expr) printf(#expr " = %d\n", (expr))
 
