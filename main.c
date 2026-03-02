@@ -118,6 +118,10 @@ void do_request(char* path) {
 
     /* printf("fname='%s'\n",fname); */
 
+    if (strstr("..",fname) != NULL) {
+        fname = "notfound";
+    }
+
     FILE* f = fopen(fname,"r");
 
     if (f == NULL) {
